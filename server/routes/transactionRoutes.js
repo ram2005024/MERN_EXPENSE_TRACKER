@@ -4,6 +4,7 @@ import {
   deleteIncome,
   getIncome,
 } from "../controllers/incomeController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 import {
   addExpense,
   getExpense,
@@ -13,9 +14,9 @@ export const transactionRoute = express.Router();
 
 //Creating methods for transaction route
 transactionRoute
-  .post("/add_income", addIncome)
-  .get("/get_income", getIncome)
-  .delete("/delete_income/:id", deleteIncome)
-  .post("/add_expense", addExpense)
-  .get("/get_expense", getExpense)
-  .delete("/remove_expense/:id", deleteExpense);
+  .post("/add_income", authMiddleware, addIncome)
+  .get("/get_income", authMiddleware, getIncome)
+  .delete("/delete_income/:id", authMiddleware, deleteIncome)
+  .post("/add_expense", authMiddleware, addExpense)
+  .get("/get_expense", authMiddleware, getExpense)
+  .delete("/remove_expense/:id", authMiddleware, deleteExpense);

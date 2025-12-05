@@ -22,6 +22,7 @@ import esewalogo from "../assets/esewa.png";
 import axios from "axios";
 export const TransactionContext = createContext();
 export const TransactionContextProvider = ({ children }) => {
+  const [userName, setUserName] = useState("User");
   const sections = [
     {
       name: "Dashboard",
@@ -110,10 +111,15 @@ export const TransactionContextProvider = ({ children }) => {
   ];
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const serverURL = "http://localhost:5000/transactions";
+  const serverURL = "http://localhost:5000";
+  //getting user from token
   useEffect(() => {
     axios
-      .get(`${serverURL}/get_income`)
+      .get(`${serverURL}/auth`, { withCredentials: true })
+      .then((res) => setUserName(res.data.userName))
+      .catch((error) => console.log(error.message));
+    axios
+      .get(`${serverURL}/transactions/get_income`, { withCredentials: true })
       .then((res) => {
         setIncomes(res.data);
       })
@@ -121,7 +127,7 @@ export const TransactionContextProvider = ({ children }) => {
   }, []);
   useEffect(() => {
     axios
-      .get(`${serverURL}/get_expense`)
+      .get(`${serverURL}/transactions/get_expense`, { withCredentials: true })
       .then((res) => {
         setExpenses(res.data);
       })
@@ -139,6 +145,7 @@ export const TransactionContextProvider = ({ children }) => {
         serverURL,
         incomes,
         setIncomes,
+        userName,
         activeSectionIndex,
         setActiveSectionIndex,
         iconsForIncome,

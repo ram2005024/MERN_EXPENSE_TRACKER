@@ -1,9 +1,32 @@
 import React, { useContext } from "react";
 import { TransactionContext } from "../context/transactionContext";
+import { Navigate, useNavigate } from "react-router-dom";
+import { MdExitToApp } from "react-icons/md";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Nav = () => {
-  const { sections, activeSectionIndex, setActiveSectionIndex } =
-    useContext(TransactionContext);
+  const navigate = useNavigate();
+  const {
+    sections,
+    activeSectionIndex,
+    setActiveSectionIndex,
+    userName,
+    serverURL,
+  } = useContext(TransactionContext);
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(
+        `${serverURL}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      if (res.data.success) toast.success(res.data.message);
+      navigate("/authentication");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   return (
     <div className=" hidden  lg:bg-gray-100 lg:border-2 lg:col-span-3 lg:border-white lg:px-6 lg:py-8 lg:flex lg:flex-col lg:justify-between lg:rounded-lg">
       <div className="flex flex-col gap-6">
@@ -15,7 +38,7 @@ const Nav = () => {
           />
           <div className="flex flex-col  justify-center items-start">
             {/* User name */}
-            <span className="font-bold text-indigo-900">Shekhar</span>
+            <span className="font-bold text-indigo-900">{userName}</span>
             <span className="font-extralight text-indigo-900">Your money</span>
           </div>
         </div>
@@ -40,6 +63,18 @@ const Nav = () => {
               </div>
             );
           })}
+          <div className="mt-3 flex gap-3 items-center cursor-pointer group ">
+            <MdExitToApp
+              size={20}
+              className="text-gray-600 group-hover:text-red-400 transition-colors duration-300"
+            />
+            <span
+              className="text-gray-700 group-hover:text-red-400 transition-colors duration-300"
+              onClick={handleLogout}
+            >
+              Logout
+            </span>
+          </div>
         </div>
       </div>
     </div>

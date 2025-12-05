@@ -24,13 +24,19 @@ const Income = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${serverURL}/add_income`, {
-        title,
-        amount: Number(amount),
-        category,
-        date,
-        des,
-      })
+      .post(
+        `${serverURL}/transactions/add_income`,
+        {
+          title,
+          amount: Number(amount),
+          category,
+          date,
+          des,
+        },
+        {
+          withCredentials: true,
+        }
+      )
       .then((response) => {
         toast.success(response.data.message);
         setTitle("");
@@ -44,7 +50,9 @@ const Income = () => {
 
   useEffect(() => {
     axios
-      .get(`${serverURL}/get_income`)
+      .get(`${serverURL}/transactions/get_income`, {
+        withCredentials: true,
+      })
       .then((response) => {
         setIncomes(response.data);
       })
@@ -54,7 +62,12 @@ const Income = () => {
   }, [incomes, setIncomes, serverURL]);
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${serverURL}/delete_income/${id}`);
+      const response = await axios.delete(
+        `${serverURL}/transactions/delete_income/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.message);

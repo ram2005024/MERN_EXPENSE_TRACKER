@@ -1,17 +1,39 @@
 import { useContext, useState } from "react";
 import Nav from "./components/Nav";
-import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Dashboard from "./components/Dashboard";
 import ViewTransaction from "./components/ViewTransaction";
 import Income from "./components/Income";
 import Expense from "./components/Expense";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { TransactionContext } from "./context/transactionContext";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { MdExitToApp } from "react-icons/md";
 
 const App = () => {
   const [isActive, setIsActive] = useState(false);
-  const { activeSection, sections, setActiveSectionIndex, activeSectionIndex } =
-    useContext(TransactionContext);
+  const {
+    activeSection,
+    sections,
+    setActiveSectionIndex,
+    activeSectionIndex,
+    serverURL,
+  } = useContext(TransactionContext);
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(
+        `${serverURL}/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      if (res.data.success) toast.success(res.data.message);
+      navigate("/authentication");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   return (
     <div className="w-full min-h-screen flex-1  bg-[url('/bg.png')] bg-cover  sm:p-10 pt-3 pl-3 pr-3 overflow-x-hidden">
       <div className="grid relative lg:grid-cols-12 md:gap-10 gap-5 h-full transition-all duration-150">
@@ -58,6 +80,18 @@ const App = () => {
                   </div>
                 );
               })}
+              <div className="mt-3 flex gap-3 items-center cursor-pointer group ">
+                <MdExitToApp
+                  size={20}
+                  className="text-gray-600 group-hover:text-red-400 transition-colors duration-300"
+                />
+                <span
+                  className="text-gray-700 group-hover:text-red-400 transition-colors duration-300"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </span>
+              </div>
             </div>
           </div>
         )}
@@ -74,7 +108,6 @@ const App = () => {
         {activeSection.type === "income" && <Income />}
         {activeSection.type === "expense" && <Expense />}
       </div>
-      <ToastContainer autoClose={2000} />
     </div>
   );
 };
