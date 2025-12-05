@@ -1,0 +1,40 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@import "tailwindcss";
+* {
+  font-family: "Outfit", sans-serif;
+  box-sizing: border-box;
+}
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}
+@keyframes shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.button-bg {
+  background: conic-gradient(
+    from 0deg,
+    #00f5ff,
+    #ff00c7,
+    #ffd700,
+    #00ff85,
+    #8a2be2,
+    #00f5ff
+  );
+  background-size: 300% 300%;
+  animation: shine 4s ease-out infinite;
+}
