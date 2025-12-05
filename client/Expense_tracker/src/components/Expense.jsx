@@ -12,6 +12,7 @@ import {
 
 import axios from "axios";
 const Expense = () => {
+  axios.defaults.withCredentials = true;
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState();
   const [category, setCategory] = useState("");
@@ -24,13 +25,17 @@ const Expense = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${serverURL}/add_expense`, {
-        title,
-        amount: Number(amount),
-        category,
-        date,
-        des,
-      })
+      .post(
+        `${serverURL}/transactions/add_expense`,
+        {
+          title,
+          amount: Number(amount),
+          category,
+          date,
+          des,
+        },
+        { withCredentials: true }
+      )
       .then((response) => {
         toast.success(response.data.message);
         setTitle("");
@@ -44,7 +49,7 @@ const Expense = () => {
 
   useEffect(() => {
     axios
-      .get(`${serverURL}/get_expense`)
+      .get(`${serverURL}/transactions/get_expense`, { withCredentials: true })
       .then((response) => {
         setExpenses(response.data);
       })
@@ -54,7 +59,10 @@ const Expense = () => {
   }, [expenses, setExpenses, serverURL]);
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${serverURL}/remove_expense/${id}`);
+      const response = await axios.delete(
+        `${serverURL}/transactions/remove_expense/${id}`,
+        { withCredentials: true }
+      );
       toast.success(response.data.message);
     } catch (error) {
       toast.error(error.message);

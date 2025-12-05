@@ -1,5 +1,6 @@
-import { timeStamp } from "console";
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 const UserSchema = new mongoose.Schema(
   {
     name: {
@@ -11,11 +12,30 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
-    password: {
+    pwd: {
       type: String,
       required: true,
     },
   },
   { timestamps: true }
 );
-export const userModel = new mongoose.model("user_details", UserSchema);
+UserSchema.pre("save", async function () {
+  if (!this.isModified("pwd")) return;
+  const salt = await bcrypt.genSalt(10);
+  this.pwd = await bcrypt.hash(this.pwd, salt);
+});
+UserSchema.methods.comparePwd = async function (candidatePassword) {
+  const isMatch = await bcrypt.compare(candidatePassword, this.pwd);
+  return isMatch;
+};
+UserSchema.methods.genTokens = function () {
+  const id = this._id;
+  return jwt.sign(
+    { userID: id, userName: this.name },
+    process.env.JWT_SECRET_KEY,
+    {
+      expiresIn: "1d",
+    }
+  );
+};
+export const userModel = mongoose.model("user_details", UserSchema);
