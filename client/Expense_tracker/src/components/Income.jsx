@@ -13,19 +13,25 @@ import {
 import axios from "axios";
 const Income = () => {
   const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState();
+  const [amount, setAmount] = useState("");
   const [category, setCategory] = useState("");
   const [des, setDes] = useState("");
   const [date, setDate] = useState("");
 
-  const { serverURL, incomes, setIncomes, iconsForIncome, totalIncome } =
-    useContext(TransactionContext);
+  const {
+    serverURL,
+    incomes,
+    setIncomes,
+    iconsForIncome,
+    totalIncome,
+    user_id,
+  } = useContext(TransactionContext);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
+    await axios
       .post(
-        `${serverURL}/transactions/add_income`,
+        `${serverURL}/transactions/add_income/${user_id}`,
         {
           title,
           amount: Number(amount),
@@ -39,27 +45,27 @@ const Income = () => {
       )
       .then((response) => {
         toast.success(response.data.message);
+        axios
+          .get(`${serverURL}/transactions/get_income/${user_id}`, {
+            withCredentials: true,
+          })
+          .then((response) => {
+            setIncomes(response.data);
+          })
+          .catch((error) => {
+            console.log("Error occured: ", error);
+          });
         setTitle("");
         setAmount("");
         setCategory("");
         setDate("");
         setDes("");
       })
-      .catch((error) => toast.error(error.message));
+      .catch((error) =>
+        toast.error(error.response?.data?.message || error.message)
+      );
   };
 
-  useEffect(() => {
-    axios
-      .get(`${serverURL}/transactions/get_income`, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        setIncomes(response.data);
-      })
-      .catch((error) => {
-        console.log("Error occured: ", error);
-      });
-  }, [incomes, setIncomes, serverURL]);
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
@@ -69,6 +75,16 @@ const Income = () => {
         }
       );
       toast.success(response.data.message);
+      axios
+        .get(`${serverURL}/transactions/get_income/${user_id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setIncomes(response.data);
+        })
+        .catch((error) => {
+          console.log("Error occured: ", error);
+        });
     } catch (error) {
       toast.error(error.message);
     }
@@ -83,12 +99,12 @@ const Income = () => {
           {totalIncome}{" "}
         </span>
       </div>
-      <div
-        className="w-full  gap-5 grid md:grid-cols-8"
-        onSubmit={handleSubmit}
-      >
+      <div className="w-full  gap-5 grid md:grid-cols-8">
         {/* Form Section */}
-        <form className="flex flex-col gap-4 md:col-span-2">
+        <form
+          className="flex flex-col gap-4 md:col-span-2"
+          onSubmit={(e) => handleSubmit(e)}
+        >
           <input
             type="text"
             value={title}

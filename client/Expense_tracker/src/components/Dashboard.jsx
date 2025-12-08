@@ -15,7 +15,6 @@ const Dashboard = () => {
       type: item.type,
     }))
     .slice(0, 4);
-  console.log(incomes);
   const minIncome =
     incomes.length == 0 ? "0" : Math.min(...incomes.map((i) => i.amount)); //satefy from dispalying infinity if incomes is empty
   const maxIncome =
@@ -26,7 +25,7 @@ const Dashboard = () => {
     expenses.length == 0 ? "0" : Math.max(...expenses.map((i) => i.amount)); //satefy from dispalying infinity if incomes is empty
   return (
     <div className="md:col-span-9 w-auto bg-gray-100 border-2 border-white rounded-lg sm:px-4 sm:py-8 pr-6 py-3  flex flex-col gap-2">
-      <h2 className="sm:text-3xl text-xl text-indigo-900 font-semibold text-center sm:text-start">
+      <h2 className="sm:text-3xl text-xl text-indigo-900 font-semibold ml-6 sm:text-start">
         Transactions Overview
       </h2>
       <div className="grid md:grid-cols-9 pl-3 gap-6">

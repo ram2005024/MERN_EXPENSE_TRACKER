@@ -1,19 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { TransactionContext } from "../context/transactionContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { MdExitToApp } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const Nav = () => {
   const navigate = useNavigate();
-  const {
-    sections,
-    activeSectionIndex,
-    setActiveSectionIndex,
-    userName,
-    serverURL,
-  } = useContext(TransactionContext);
+  const { sections, userName, serverURL } = useContext(TransactionContext);
+  const [activeType, setActiveType] = useState("dashboard");
   const handleLogout = async () => {
     try {
       const res = await axios.post(
@@ -44,26 +39,28 @@ const Nav = () => {
         </div>
         <div className="flex flex-col gap-2 px-2">
           {sections.map((items, index) => {
+            const to = `/app/${items.type}`;
+
             return (
               <div
-                onClick={() => {
-                  setActiveSectionIndex(index);
-                }}
                 key={index}
-                className={`flex gap-3 cursor-pointer relative text-gray-500  
-                  ${
-                    activeSectionIndex === index
-                      ? " text-indigo-900 before:content-[''] before:absolute before:top-0 before:left-[-10px] before:h-full before:w-1 before:rounded-3xl before:bg-indigo-900 transition-all duration-200 "
-                      : ""
-                  }
-                  `}
+                onClick={() => {
+                  setActiveType(items.type);
+                }}
+                className={`flex gap-3 cursor-pointer relative text-gray-500 ${
+                  activeType === items.type
+                    ? "text-indigo-900 before:content-[''] before:absolute before:top-0 before:left-[-10px] before:h-full before:w-1 before:rounded-3xl before:bg-indigo-900 transition-all duration-200"
+                    : ""
+                }`}
               >
                 <items.icons className="size-6 " />
-                <span>{items.name}</span>
+                <Link to={to} onClick={() => setActiveType(items.type)}>
+                  {items.name}
+                </Link>
               </div>
             );
           })}
-          <div className="mt-3 flex gap-3 items-center cursor-pointer group ">
+          <div className="mt-3 flex gap-3 items-center cursor-pointer group">
             <MdExitToApp
               size={20}
               className="text-gray-600 group-hover:text-red-400 transition-colors duration-300"

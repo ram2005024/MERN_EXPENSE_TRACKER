@@ -12,21 +12,26 @@ import {
 
 import axios from "axios";
 const Expense = () => {
-  axios.defaults.withCredentials = true;
   const [title, setTitle] = useState("");
   const [amount, setAmount] = useState();
   const [category, setCategory] = useState("");
   const [des, setDes] = useState("");
   const [date, setDate] = useState("");
 
-  const { serverURL, expenses, setExpenses, iconsForExpense, totalExpense } =
-    useContext(TransactionContext);
+  const {
+    serverURL,
+    expenses,
+    setExpenses,
+    iconsForExpense,
+    totalExpense,
+    user_id,
+  } = useContext(TransactionContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
       .post(
-        `${serverURL}/transactions/add_expense`,
+        `${serverURL}/transactions/add_expense/${user_id}`,
         {
           title,
           amount: Number(amount),
@@ -38,6 +43,16 @@ const Expense = () => {
       )
       .then((response) => {
         toast.success(response.data.message);
+        axios
+          .get(`${serverURL}/transactions/get_expense/${user_id}`, {
+            withCredentials: true,
+          })
+          .then((response) => {
+            setExpenses(response.data);
+          })
+          .catch((error) => {
+            console.log("Error occured: ", error);
+          });
         setTitle("");
         setAmount("");
         setCategory("");
@@ -47,16 +62,6 @@ const Expense = () => {
       .catch((error) => toast.error(error.message));
   };
 
-  useEffect(() => {
-    axios
-      .get(`${serverURL}/transactions/get_expense`, { withCredentials: true })
-      .then((response) => {
-        setExpenses(response.data);
-      })
-      .catch((error) => {
-        console.log("Error occured: ", error);
-      });
-  }, [expenses, setExpenses, serverURL]);
   const handleDelete = async (id) => {
     try {
       const response = await axios.delete(
@@ -64,6 +69,16 @@ const Expense = () => {
         { withCredentials: true }
       );
       toast.success(response.data.message);
+      axios
+        .get(`${serverURL}/transactions/get_expense/${user_id}`, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          setExpenses(response.data);
+        })
+        .catch((error) => {
+          console.log("Error occured: ", error);
+        });
     } catch (error) {
       toast.error(error.message);
     }
@@ -78,12 +93,12 @@ const Expense = () => {
           {totalExpense}{" "}
         </span>
       </div>
-      <div
-        className="w-full  gap-5 grid md:grid-cols-8"
-        onSubmit={handleSubmit}
-      >
+      <div className="w-full  gap-5 grid md:grid-cols-8">
         {/* Form Section */}
-        <form className="flex flex-col gap-4 md:col-span-2">
+        <form
+          className="flex flex-col gap-4 md:col-span-2"
+          onSubmit={(e) => handleSubmit(e)}
+        >
           <input
             type="text"
             value={title}
