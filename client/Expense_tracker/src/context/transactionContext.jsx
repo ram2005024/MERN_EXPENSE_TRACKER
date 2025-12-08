@@ -109,30 +109,68 @@ export const TransactionContextProvider = ({ children }) => {
       icons: FaBook,
     },
   ];
+  const [user_id, setUserID] = useState("");
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const serverURL = "http://localhost:5000";
+  //fetch the user when someone logsin
+  const fetchUserAndData = async () => {
+    try {
+      const res = await axios.get(`${serverURL}/auth/`, {
+        withCredentials: true,
+      });
+      const currentUserID = res.data.userID;
+      const currentUserName = res.data.userName;
+      setUserID(currentUserID);
+      setUserName(currentUserName);
+      const incomeResponse = await axios.get(
+        `${serverURL}/transactions/get_income/${currentUserID}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setIncomes(incomeResponse.data);
+
+      const expenseResponse = await axios.get(
+        `${serverURL}/transactions/get_expense/${currentUserID}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      setExpenses(expenseResponse.data);
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
   //getting user from token
   useEffect(() => {
-    axios
-      .get(`${serverURL}/auth`, { withCredentials: true })
-      .then((res) => setUserName(res.data.userName))
-      .catch((error) => console.log(error.message));
-    axios
-      .get(`${serverURL}/transactions/get_income`, { withCredentials: true })
-      .then((res) => {
-        setIncomes(res.data);
-      })
-      .catch((error) => console.log(`Error: ${error}`));
+    fetchUserAndData();
   }, []);
-  useEffect(() => {
-    axios
-      .get(`${serverURL}/transactions/get_expense`, { withCredentials: true })
-      .then((res) => {
-        setExpenses(res.data);
-      })
-      .catch((error) => console.log(`Error: ${error}`));
-  }, []);
+  // useEffect(() => {
+  //   if (!user_id) return;
+
+  //   axios
+  //     .get(`${serverURL}/transactions/get_income/${user_id}`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       setIncomes(res.data);
+  //     })
+  //     .catch((error) => console.log(`Error: ${error}`));
+  // }, [user_id]);
+  // useEffect(() => {
+  //   if (!user_id) return;
+  //   axios
+  //     .get(`${serverURL}/transactions/get_expense/${user_id}`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       setExpenses(res.data);
+  //     })
+  //     .catch((error) => console.log(`Error: ${error}`));
+  // }, [user_id]);
   const totalIncome = incomes.reduce((acc, item) => acc + item.amount, 0);
   const totalExpense = expenses.reduce((acc, item) => acc + item.amount, 0);
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
@@ -146,10 +184,12 @@ export const TransactionContextProvider = ({ children }) => {
         incomes,
         setIncomes,
         userName,
+        user_id,
         activeSectionIndex,
         setActiveSectionIndex,
         iconsForIncome,
         iconsForExpense,
+        fetchUserAndData,
         expenses,
         setExpenses,
         totalIncome,

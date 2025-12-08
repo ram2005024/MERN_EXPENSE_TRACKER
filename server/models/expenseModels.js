@@ -7,6 +7,10 @@ const ExpenseSchema = new mongoose.Schema(
       trim: true,
       maxLength: 20,
     },
+    userID: {
+      type: String,
+      required: true,
+    },
     amount: {
       type: Number,
       required: true,
@@ -19,7 +23,6 @@ const ExpenseSchema = new mongoose.Schema(
     date: {
       type: Date,
       required: true,
-      trim: true,
     },
     type: {
       type: String,

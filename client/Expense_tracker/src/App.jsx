@@ -8,18 +8,13 @@ import Expense from "./components/Expense";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { TransactionContext } from "./context/transactionContext";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { MdExitToApp } from "react-icons/md";
 
 const App = () => {
   const [isActive, setIsActive] = useState(false);
-  const {
-    activeSection,
-    sections,
-    setActiveSectionIndex,
-    activeSectionIndex,
-    serverURL,
-  } = useContext(TransactionContext);
+  const [activeType, setActiveType] = useState("dashboard");
+  const { sections, serverURL, userName } = useContext(TransactionContext);
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
@@ -50,37 +45,41 @@ const App = () => {
                 alt="user_image"
                 className="size-20 bg-white rounded-full border-6 border-white "
               />
-              <div className="flex flex-col  justify-center items-start">
+              <div className="flex flex-col justify-center items-start">
                 {/* User name */}
-                <span className="font-bold text-indigo-900">Shekhar</span>
+                <span className="font-bold text-indigo-900">{userName}</span>
                 <span className="font-extralight text-indigo-900">
                   Your money
                 </span>
               </div>
             </div>
+
             <div className="flex flex-col gap-2 px-2">
               {sections.map((items, index) => {
+                const to = `/app/${items.type}`;
+
                 return (
                   <div
+                    key={index}
                     onClick={() => {
-                      setActiveSectionIndex(index);
+                      setActiveType(items.type);
                       setIsActive(false);
                     }}
-                    key={index}
-                    className={`flex gap-3 cursor-pointer relative text-gray-500  
-                  ${
-                    activeSectionIndex === index
-                      ? " text-indigo-900 before:content-[''] before:absolute before:top-0 before:left-[-10px] before:h-full before:w-1 before:rounded-3xl before:bg-indigo-900 transition-all duration-200 "
-                      : ""
-                  }
-                  `}
+                    className={`flex gap-3 cursor-pointer relative text-gray-500 ${
+                      activeType === items.type
+                        ? "text-indigo-900 before:content-[''] before:absolute before:top-0 before:left-[-10px] before:h-full before:w-1 before:rounded-3xl before:bg-indigo-900 transition-all duration-200"
+                        : ""
+                    }`}
                   >
                     <items.icons className="size-6 " />
-                    <span>{items.name}</span>
+                    <Link to={to} onClick={() => setActiveType(items.type)}>
+                      {items.name}
+                    </Link>
                   </div>
                 );
               })}
-              <div className="mt-3 flex gap-3 items-center cursor-pointer group ">
+
+              <div className="mt-3 flex gap-3 items-center cursor-pointer group">
                 <MdExitToApp
                   size={20}
                   className="text-gray-600 group-hover:text-red-400 transition-colors duration-300"
@@ -95,6 +94,7 @@ const App = () => {
             </div>
           </div>
         )}
+
         <div className="absolute top-5 right-4 block lg:hidden">
           <FaBars
             size={16}
@@ -102,14 +102,11 @@ const App = () => {
             onClick={() => setIsActive(true)}
           />
         </div>
+
         <Nav />
-        {activeSection.type === "dashboard" && <Dashboard />}
-        {activeSection.type === "viewTransaction" && <ViewTransaction />}
-        {activeSection.type === "income" && <Income />}
-        {activeSection.type === "expense" && <Expense />}
+        <Outlet />
       </div>
     </div>
   );
 };
-
 export default App;

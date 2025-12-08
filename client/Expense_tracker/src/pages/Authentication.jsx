@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -11,11 +11,12 @@ const Authentication = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [rememberMe, setRemember] = useState(false);
-  const { serverURL } = useContext(TransactionContext);
+  const { serverURL, fetchUserAndData } = useContext(TransactionContext);
   const navigate = useNavigate();
   //------------------------------------------------//Register---------------------------------------
   const handleSignUp = async (e) => {
     e.preventDefault();
+
     try {
       const resp = await axios.post(
         `${serverURL}/auth/register`,
@@ -34,12 +35,52 @@ const Authentication = () => {
         return;
       }
 
+      setEmail("");
+      setPwd("");
+      setConfirm("");
+      setUserName("");
       navigate("/app/dashboard");
       toast.success(resp.data.message);
     } catch (error) {
       toast.error(error.message);
     }
   };
+  //-----------------------------------------Login Handler---------------------------------------------
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        `${serverURL}/auth/login`,
+        { email, pwd, rememberMe },
+        { withCredentials: true }
+      );
+
+      if (!res.data.success) {
+        setMessage(res.data.message);
+        return;
+      }
+      await fetchUserAndData();
+      setEmail("");
+      setPwd("");
+      setConfirm("");
+      setUserName("");
+
+      navigate("/app/dashboard");
+      toast.success(res.data.message);
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Login failed");
+
+      toast.error(error.response?.data?.message || "Login failed");
+    }
+  };
+  useEffect(() => {
+    if (section === "signup") {
+      setEmail("");
+      setPwd("");
+      setUserName("");
+      setMessage("");
+    }
+  }, [section]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
@@ -58,7 +99,7 @@ const Authentication = () => {
 
           {/* Login Form */}
           {section === "login" && (
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={(e) => handleSignIn(e)}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Email
@@ -99,7 +140,11 @@ const Authentication = () => {
                   Forgot password?
                 </button>
               </div>
-
+              {message && (
+                <div>
+                  <span className="text-red-700">{message}</span>
+                </div>
+              )}
               <button className="w-full bg-gradient-to-r from-pink-600 to-rose-600 text-white font-semibold py-3 rounded-lg hover:from-pink-700 hover:to-rose-700 transition-all">
                 Sign In
               </button>

@@ -2,6 +2,7 @@ import { expenseModel } from "../models/expenseModels.js";
 //Controller to add expense
 export const addExpense = async (req, res) => {
   const { title, amount, category, date, des } = req.body;
+  const userID = req.params.user_id;
   //Checking if all the field are filled
   try {
     if (!title || !amount || !category || !date || !des)
@@ -15,6 +16,7 @@ export const addExpense = async (req, res) => {
       category,
       date,
       des,
+      userID,
     });
 
     await expense.save();
@@ -25,8 +27,9 @@ export const addExpense = async (req, res) => {
 };
 //Controller to getExpense
 export const getExpense = async (req, res) => {
+  const userID = req.params.user_id;
   try {
-    const expense = await expenseModel.find().sort({ createdAt: -1 });
+    const expense = await expenseModel.find({ userID }).sort({ createdAt: -1 });
     res.status(200).json(expense);
   } catch (error) {
     res.status(500).json({ error: error.message });

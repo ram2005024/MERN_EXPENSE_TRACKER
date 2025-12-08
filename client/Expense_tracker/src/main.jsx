@@ -11,7 +11,7 @@ import { ToastContainer } from "react-toastify";
 import Income from "./components/Income.jsx";
 import Expense from "./components/Expense.jsx";
 import ViewTransaction from "./components/ViewTransaction.jsx";
-import PublicRoRoute from "./ProtectedRoute/PublicRoute.jsx";
+import PublicRoute from "./ProtectedRoute/PublicRoute.jsx";
 import Authentication from "./pages/Authentication.jsx";
 const route = createBrowserRouter([
   {
@@ -21,23 +21,23 @@ const route = createBrowserRouter([
   {
     path: "/authentication",
     element: (
-      <TransactionContextProvider>
-        <PublicRoRoute>
-          <Authentication />
-        </PublicRoRoute>
-      </TransactionContextProvider>
+      <PublicRoute>
+        <Authentication />
+      </PublicRoute>
     ),
   },
   {
     path: "/app",
     element: (
       <ProtectedRoute>
-        <TransactionContextProvider>
-          <App />
-        </TransactionContextProvider>
+        <App />
       </ProtectedRoute>
     ),
     children: [
+      {
+        index: true,
+        element: <Dashboard />,
+      },
       {
         path: "dashboard",
         element: <Dashboard />,
