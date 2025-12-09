@@ -36,7 +36,7 @@ const route = createBrowserRouter([
     ),
     children: [
     {
-        index: "",
+        index: true,
         element: <Navigate to="dashboard" replace />,
       },
       {
