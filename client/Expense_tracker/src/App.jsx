@@ -13,7 +13,7 @@ import { MdExitToApp } from "react-icons/md";
 
 const App = () => {
   const [isActive, setIsActive] = useState(false);
-  const [activeType, setActiveType] = useState("dashboard");
+
   const { sections, serverURL, userName } = useContext(TransactionContext);
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -56,26 +56,24 @@ const App = () => {
 
             <div className="flex flex-col gap-2 px-2">
               {sections.map((items, index) => {
-                const to = `/app/${items.type}`;
+               
 
                 return (
-                  <div
+                 <NavLink
                     key={index}
-                    onClick={() => {
-                      setActiveType(items.type);
-                      setIsActive(false);
-                    }}
-                    className={`flex gap-3 cursor-pointer relative text-gray-500 ${
-                      activeType === items.type
-                        ? "text-indigo-900 before:content-[''] before:absolute before:top-0 before:left-[-10px] before:h-full before:w-1 before:rounded-3xl before:bg-indigo-900 transition-all duration-200"
-                        : ""
-                    }`}
+                    to={`/app/${items.type}`}
+                    className={({ isActive }) =>
+                      `flex gap-3 cursor-pointer relative text-gray-500 ${
+                        isActive
+                          ? "text-indigo-900 before:content-[''] before:absolute before:top-0 before:left-[-10px] before:h-full before:w-1 before:rounded-3xl before:bg-indigo-900 transition-all duration-200"
+                          : ""
+                      }`
+                    }
+                    onClick={() => setIsActive(false)} // just close sidebar
                   >
-                    <items.icons className="size-6 " />
-                    <Link to={to} onClick={() => setActiveType(items.type)}>
-                      {items.name}
-                    </Link>
-                  </div>
+                    <items.icons className="size-6" />
+                    {items.name}
+                  </NavLink>
                 );
               })}
 
