@@ -34,9 +34,9 @@ const route = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      {
-        index: true,
-        element: <Dashboard />,
+    {
+        index: "",
+        element: <Navigate to="dashboard" replace />,
       },
       {
         path: "dashboard",
