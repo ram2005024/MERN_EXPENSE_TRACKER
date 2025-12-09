@@ -34,6 +34,7 @@ const Authentication = () => {
         setMessage(resp.data.message);
         return;
       }
+      await fetchUserAndData();
 
       setEmail("");
       setPwd("");
