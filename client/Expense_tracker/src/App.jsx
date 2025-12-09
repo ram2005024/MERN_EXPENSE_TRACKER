@@ -8,7 +8,7 @@ import Expense from "./components/Expense";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { TransactionContext } from "./context/transactionContext";
 import axios from "axios";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import {  Outlet, useNavigate.NavLink } from "react-router-dom";
 import { MdExitToApp } from "react-icons/md";
 
 const App = () => {
