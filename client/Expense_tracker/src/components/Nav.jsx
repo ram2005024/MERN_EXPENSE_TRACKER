@@ -44,9 +44,6 @@ const Nav = () => {
             return (
               <div
                 key={index}
-                onClick={() => {
-                  setActiveType(items.type);
-                }}
                 className={`flex gap-3 cursor-pointer relative text-gray-500 ${
                   activeType === items.type
                     ? "text-indigo-900 before:content-[''] before:absolute before:top-0 before:left-[-10px] before:h-full before:w-1 before:rounded-3xl before:bg-indigo-900 transition-all duration-200"
