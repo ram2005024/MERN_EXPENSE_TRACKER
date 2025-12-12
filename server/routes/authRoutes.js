@@ -1,5 +1,10 @@
 import express from "express";
-import { login, register } from "../controllers/authController.js";
+import {
+  forgetController,
+  login,
+  register,
+  verifyOTPController,
+} from "../controllers/authController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 export const authRoutes = express.Router();
 authRoutes.post("/register", register);
@@ -18,3 +23,5 @@ authRoutes.post("/logout", (req, res) => {
   });
   res.json({ success: true, message: "Logout successfull" });
 });
+authRoutes.post("/forget", forgetController);
+authRoutes.post("/verifyOTP", verifyOTPController);

@@ -17,6 +17,7 @@ import Expense from "./components/Expense.jsx";
 import ViewTransaction from "./components/ViewTransaction.jsx";
 import PublicRoute from "./ProtectedRoute/PublicRoute.jsx";
 import Authentication from "./pages/Authentication.jsx";
+
 const route = createBrowserRouter([
   {
     path: "/",
@@ -30,6 +31,7 @@ const route = createBrowserRouter([
       </PublicRoute>
     ),
   },
+
   {
     path: "/app",
     element: (

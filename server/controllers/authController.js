@@ -1,4 +1,6 @@
 import { userModel } from "../models/model.js";
+import { genOTP } from "../utils/generateOTP.js";
+import { sendOTP } from "../utils/otpSender.js";
 //register controller
 export const register = async (req, res) => {
   const { userName, email, pwd, confirm } = req.body;
@@ -55,5 +57,45 @@ export const login = async (req, res) => {
     return res.status(200).json({ message: "LoggedIn", success: true });
   } catch (error) {
     res.json({ message: error.message, error: error });
+  }
+};
+//---------------------------forget controller---------------------------------
+export const forgetController = async (req, res) => {
+  const { email } = req.body;
+  try {
+    if (!email)
+      return res.json({ success: false, message: "Please enter the email" });
+    const userExist = await userModel.findOne({ email });
+    if (!userExist)
+      return res.status(401).json({
+        success: false,
+        message: "User doesnot exist with this email",
+      });
+    const otp = genOTP();
+    userExist.otp = otp;
+    userExist.otpExpiresAt = new Date(Date.now() + 2 * 60 * 1000);
+    await userExist.save();
+    sendOTP(email, otp);
+    return res.json({ success: true, message: "Otp sent sucessfully" });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Error while sending the verification code",
+    });
+  }
+};
+//---------------------------------Verify otp controller-----------------------------------------
+export const verifyOTPController = async (req, res) => {
+  const { otp, email } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+    if (Date.now() > new Date(user.otpExpiresAt).getTime()) {
+      res.status(401).json({ success: false, message: "Otp Expires" });
+    }
+    if (otp !== user.otp)
+      return res.json({ success: false, message: "Invalid otp" });
+    return res.json({ success: true, message: "Otp verified" });
+  } catch (error) {
+    return res.json({ error: error, success: false });
   }
 };
