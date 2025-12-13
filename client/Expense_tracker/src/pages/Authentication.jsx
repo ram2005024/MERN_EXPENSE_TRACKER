@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Exclamation from "../assets/exclamation.png";
 import { TransactionContext } from "../context/transactionContext";
+import changePassword from "../assets/changePwd.png";
 import otpImage from "../assets/otp_image.png";
 import { FaArrowLeft, FaExclamation } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -80,9 +81,10 @@ const Authentication = () => {
     }
   };
   useEffect(() => {
-    if (section === "login" && section === "signup" && section==="forget") {
+    if (section === "login" && section === "signup" ) {
       setEmail("");
       setPwd("");
+      setConfirm("");
       setUserName("");
       setMessage("");
     }
@@ -138,6 +140,31 @@ const Authentication = () => {
       if (!res.data.success) return toast.error(res.data.message);
       toast.success(res.data.message);
       setSection("newPassword");
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+  const handleNewPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${serverURL}/auth/newPassword`, {
+        pwd,
+        confirm,
+        email,
+      });
+      if (!res.data.success) {
+        toast.error(res.data.message);
+
+        setMessage(res.data.message);
+        return;
+      }
+      setPwd("");
+      setConfirm("");
+      setMessage("");
+      setEmail("");
+      setSection("login");
+      toast.success(res.data.message);
+      navigate("/authentication");
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }
@@ -381,7 +408,8 @@ const Authentication = () => {
           </button>
         </div>
       )}
-      {section == "newPassword" && (<div className="border border-gray-500 py-12 px-10 flex flex-col gap-5  rounded-lg bg-zinc-50 text-center">
+      {section == "newPassword" && (
+        <div className="border border-gray-500 py-12 px-10 flex flex-col gap-5  rounded-lg bg-zinc-50 text-center">
           <img
             src={changePassword}
             alt="changePwd_logo"
@@ -416,7 +444,8 @@ const Authentication = () => {
               Submit
             </button>
           </form>
-        </div>)}
+        </div>
+      )}
     </div>
   );
 };
