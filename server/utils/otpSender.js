@@ -3,9 +3,7 @@ import { otpHTML } from "../htmlStructure/otpFormatGmail.js";
 export const sendOTP = (email, otp) => {
   //creating transport
   const transport = nodemailer.createTransport({
-   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+   service:"gmail",
     auth: {
       user: "sharmashekhar20050@gmail.com",
       pass: process.env.GMAIL_PASS,
