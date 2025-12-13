@@ -34,7 +34,7 @@ const Home = () => {
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50 relative pt-3 overflow-hidden">
       <div className="relative z-10 min-h-screen flex flex-col justify-center items-center px-6 py-16">
         {/* Main Content Container */}
-        <span>hsfbksdfkjdbsf</span>
+
         <div
           className={`max-w-5xl w-full transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"

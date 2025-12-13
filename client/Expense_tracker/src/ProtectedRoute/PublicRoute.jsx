@@ -8,9 +8,12 @@ const PublicRoute = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/auth/", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://mern-expense-tracker-1-1fu9.onrender.com/auth/",
+          {
+            withCredentials: true,
+          }
+        );
         if (res.data.userID) setIsAuthenticated(true);
       } catch (error) {
         setIsAuthenticated(false);

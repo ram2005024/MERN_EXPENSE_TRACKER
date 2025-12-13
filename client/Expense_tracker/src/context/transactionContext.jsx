@@ -112,7 +112,7 @@ export const TransactionContextProvider = ({ children }) => {
   const [user_id, setUserID] = useState("");
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const serverURL = "http://localhost:5000";
+  const serverURL = "https://mern-expense-tracker-1-1fu9.onrender.com";
   //fetch the user when someone logsin
   const fetchUserAndData = async () => {
     try {
