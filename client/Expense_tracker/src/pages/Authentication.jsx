@@ -147,7 +147,7 @@ const Authentication = () => {
   const handleNewPassword = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${serverURL}/auth/newPassword`, {
+      const res = await axios.post(`${serverURL}/auth/verifyOTP`, {
         pwd,
         confirm,
         email,
