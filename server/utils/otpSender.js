@@ -4,8 +4,8 @@ export const sendOTP = (email, otp) => {
   //creating transport
   const transport = nodemailer.createTransport({
    host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
     auth: {
       user: "sharmashekhar20050@gmail.com",
       pass: process.env.GMAIL_PASS,
