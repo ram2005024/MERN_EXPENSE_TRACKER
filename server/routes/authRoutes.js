@@ -2,6 +2,7 @@ import express from "express";
 import {
   forgetController,
   login,
+  newPassword,
   register,
   verifyOTPController,
 } from "../controllers/authController.js";
@@ -25,3 +26,4 @@ authRoutes.post("/logout", (req, res) => {
 });
 authRoutes.post("/forget", forgetController);
 authRoutes.post("/verifyOTP", verifyOTPController);
+authRoutes.post("/newPassword", newPassword);

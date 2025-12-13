@@ -99,3 +99,17 @@ export const verifyOTPController = async (req, res) => {
     return res.json({ error: error, success: false });
   }
 };
+//____________________________________New Password Controller_____________________________________________________
+export const newPassword = async (req, res) => {
+  const { email, pwd, confirm } = req.body;
+  try {
+    const user = await userModel.findOne({ email });
+    if (pwd !== confirm)
+      return res.json({ success: false, message: "Password mismatched" });
+    user.pwd = pwd;
+    await user.save();
+    return res.json({ success: true, message: "Password changed" });
+  } catch (error) {
+    return res.json({ sucess: false, message: "Server error" });
+  }
+};

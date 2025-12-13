@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Exclamation from "../assets/exclamation.png";
 import { TransactionContext } from "../context/transactionContext";
+import changePassword from "../assets/changePwd.png";
 import otpImage from "../assets/otp_image.png";
 import { FaArrowLeft, FaExclamation } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -83,6 +84,7 @@ const Authentication = () => {
     if (section === "login" && section === "signup") {
       setEmail("");
       setPwd("");
+      setConfirm("");
       setUserName("");
       setMessage("");
     }
@@ -138,6 +140,31 @@ const Authentication = () => {
       if (!res.data.success) return toast.error(res.data.message);
       toast.success(res.data.message);
       setSection("newPassword");
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message);
+    }
+  };
+  const handleNewPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${serverURL}/auth/newPassword`, {
+        pwd,
+        confirm,
+        email,
+      });
+      if (!res.data.success) {
+        toast.error(res.data.message);
+        dsfsdfsdfsdfsdfdsfdsf;
+        setMessage(res.data.message);
+        return;
+      }
+      setPwd("");
+      setConfirm("");
+      setMessage("");
+      setEmail("");
+      setSection("login");
+      toast.success(res.data.message);
+      navigate("/authentication");
     } catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }
@@ -381,7 +408,44 @@ const Authentication = () => {
           </button>
         </div>
       )}
-      {section == "newPassword" && <div>Hello</div>}
+      {section == "newPassword" && (
+        <div className="border border-gray-500 py-12 px-10 flex flex-col gap-5  rounded-lg bg-zinc-50 text-center">
+          <img
+            src={changePassword}
+            alt="changePwd_logo"
+            className="size-12 self-center"
+          />
+          <h2 className="text-2xl font-semibold">Change your password</h2>
+          <span className="text-sm text-gray-500 ">
+            Enter a new password below to make a new password
+          </span>
+          <form onSubmit={(e) => handleNewPassword(e)}>
+            <div className="flex flex-col gap-2.5 w-full">
+              <input
+                type="password"
+                value={pwd}
+                onChange={(e) => setPwd(e.target.value)}
+                placeholder="New password"
+                className="text-gray-500 p-2.5 rounded-lg w-full border focus:ring focus:ring-orange-400 focus:outline-none"
+              />
+              <input
+                type="password"
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                placeholder="Confirm new password"
+                className="text-gray-500 p-2.5 rounded-lg w-full border focus:ring focus:ring-orange-400 focus:outline-none"
+              />
+            </div>
+            {message && <span className="text-red-500 text-sm">{message}</span>}
+            <button
+              type="submit"
+              className="text-white  w-full cursor-pointer text-center mt-5 rounded-lg p-2.5 mb-3.5 bg-indigo-600"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 };
