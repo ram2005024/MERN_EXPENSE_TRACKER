@@ -3,7 +3,8 @@ import { otpHTML } from "../htmlStructure/otpFormatGmail.js";
 export const sendOTP = (email, otp) => {
   //creating transport
   const transport = nodemailer.createTransport({
-   service:"gmail",
+   host:'smtp-relay.brevo.com',
+    port:587,
     auth: {
       user: "sharmashekhar20050@gmail.com",
       pass: process.env.GMAIL_PASS,
