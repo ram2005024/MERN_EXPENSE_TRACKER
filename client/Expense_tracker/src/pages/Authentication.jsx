@@ -80,7 +80,7 @@ const Authentication = () => {
     }
   };
   useEffect(() => {
-    if (section === "login" && section === "signup") {
+    if (section === "login" && section === "signup" && section==="forget) {
       setEmail("");
       setPwd("");
       setUserName("");
