@@ -3,6 +3,7 @@ import {
   forgetController,
   login,
   register,
+  newPassword,
   verifyOTPController,
 } from "../controllers/authController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -18,10 +19,11 @@ authRoutes.post("/login", login);
 authRoutes.post("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "lax",
-    secure: false,
+    sameSite: "none",
+    secure: true,
   });
   res.json({ success: true, message: "Logout successfull" });
 });
 authRoutes.post("/forget", forgetController);
 authRoutes.post("/verifyOTP", verifyOTPController);
+authRoutes.post("/newPassword", newPassword);
