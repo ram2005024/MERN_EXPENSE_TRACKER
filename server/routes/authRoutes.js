@@ -3,6 +3,7 @@ import {
   forgetController,
   login,
   register,
+  newPassword,
   verifyOTPController,
 } from "../controllers/authController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
@@ -25,3 +26,4 @@ authRoutes.post("/logout", (req, res) => {
 });
 authRoutes.post("/forget", forgetController);
 authRoutes.post("/verifyOTP", verifyOTPController);
+authRoutes.post("/newPassword", newPassword);
