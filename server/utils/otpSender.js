@@ -1,27 +1,19 @@
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 import { otpHTML } from "../htmlStructure/otpFormatGmail.js";
-export const sendOTP = (email, otp) => {
-  //creating transport
-  const transport = nodemailer.createTransport({
-   host:'smtp-relay.brevo.com',
-    port:587,
-    secure:false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-    connectionTimeout: 20000,
-  });
-  //creating mail options
-  const mailOptions = {
-    from: process.env.SENDER_EMAIL,
-    to: email,
-    subject: "Forget your password 🔑",
-    html: `${otpHTML(otp)}`,
-  };
-  //sending mail using smtp protocol
-  transport.sendMail(mailOptions, (error, info) => {
-    if (error) console.log(error);
-    console.log(info.response);
-  });
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+export const sendOTP = async (email, otp) => {
+  try {
+    await resend.emails.send({
+      from: "Experience Tracker <sharmashekhar20050@gmail.com>",
+      to: email,
+      subject: "Reset your password 🔐",
+      html: otpHTML(otp),
+    });
+
+    console.log("OTP email sent successfully");
+  } catch (error) {
+    console.error("Resend email failed:", error);
+  }
 };
