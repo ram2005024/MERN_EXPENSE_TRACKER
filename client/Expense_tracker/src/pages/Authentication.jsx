@@ -40,8 +40,12 @@ const Authentication = () => {
         setMessage(resp.data.message);
         return;
       }
+<<<<<<< HEAD
       await fetchUserAndData();
 
+=======
+await fetchUserAndData();
+>>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
       setEmail("");
       setPwd("");
       setConfirm("");

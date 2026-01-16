@@ -15,7 +15,7 @@ connectDB();
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://mern-expense-tracker-1-frontend.onrender.com",
     credentials: true,
   })
 );

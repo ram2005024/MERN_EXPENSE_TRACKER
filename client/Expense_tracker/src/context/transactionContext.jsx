@@ -121,7 +121,11 @@ export const TransactionContextProvider = ({ children }) => {
   const [user_id, setUserID] = useState("");
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
+<<<<<<< HEAD
   const serverURL = import.meta.env.VITE_SERVER_URL;
+=======
+  const serverURL = "https://mern-expense-tracker-g93r.onrender.com";
+>>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
   //fetch the user when someone logsin
   const fetchUserAndData = async () => {
     try {

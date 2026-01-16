@@ -1,5 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Navigate } from "react-router-dom";
 import "./index.css";
 import { TransactionContextProvider } from "./context/transactionContext.jsx";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.jsx";
@@ -40,10 +41,14 @@ const route = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
+<<<<<<< HEAD
       {
         index: true,
         element: <Navigate to="dashboard" replace />,
       },
+=======
+  { path: "", element: <Navigate to="/app/dashboard" replace /> },
+>>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
       {
         path: "dashboard",
         element: <Dashboard />,
