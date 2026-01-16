@@ -1,10 +1,7 @@
 import { useContext, useState } from "react";
 import Nav from "./components/Nav";
 import { toast } from "react-toastify";
-import Dashboard from "./components/Dashboard";
-import ViewTransaction from "./components/ViewTransaction";
-import Income from "./components/Income";
-import Expense from "./components/Expense";
+
 import { FaBars, FaTimes } from "react-icons/fa";
 import { TransactionContext } from "./context/transactionContext";
 import axios from "axios";

@@ -139,6 +139,7 @@ const Expense = () => {
               <option value="Health">Health</option>
               <option value="Entertainment">Entertainment</option>
               <option value="Education">Education</option>
+              <option value="Others">Others</option>
             </select>
           </div>
           <textarea

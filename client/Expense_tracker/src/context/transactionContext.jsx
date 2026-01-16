@@ -9,6 +9,7 @@ import {
   FaHospital,
   FaMoneyBillWave,
   FaShoppingCart,
+  FaStore,
   FaUtensils,
 } from "react-icons/fa";
 import {
@@ -74,6 +75,10 @@ export const TransactionContextProvider = ({ children }) => {
       category: "Loan",
       icons: FaMoneyBillWave,
     },
+    {
+      category: "Others",
+      icons: FaMoneyBillWave,
+    },
   ];
   const iconsForExpense = [
     {
@@ -108,11 +113,15 @@ export const TransactionContextProvider = ({ children }) => {
       category: "Education",
       icons: FaBook,
     },
+    {
+      category: "Others",
+      icons: FaStore,
+    },
   ];
   const [user_id, setUserID] = useState("");
   const [incomes, setIncomes] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const serverURL = "https://mern-expense-tracker-1-1fu9.onrender.com";
+  const serverURL = import.meta.env.VITE_SERVER_URL;
   //fetch the user when someone logsin
   const fetchUserAndData = async () => {
     try {

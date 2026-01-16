@@ -8,12 +8,9 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await axios.get(
-          "https://mern-expense-tracker-1-1fu9.onrender.com/auth/",
-          {
-            withCredentials: true,
-          }
-        );
+        const res = await axios.get(import.meta.env.VITE_SERVER_URL + "/auth", {
+          withCredentials: true,
+        });
         console.log(res);
         if (res.data.userID) setIsAuthenticated(true);
       } catch (error) {

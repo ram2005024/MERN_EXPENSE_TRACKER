@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { TransactionContext } from "../context/transactionContext";
 import { toast } from "react-toastify";
 import {
@@ -143,6 +143,7 @@ const Income = () => {
               <option value="Youtube">Youtube</option>
               <option value="Esewa">Esewa</option>
               <option value="Loan">Loan</option>
+              <option value="Others">Others</option>
             </select>
           </div>
           <textarea
