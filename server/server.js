@@ -15,11 +15,14 @@ connectDB();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://mern-expense-tracker-1-frontend.onrender.com",
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.CLIENT_URL
+        : "http://localhost:5173",
     credentials: true,
   })
 );
-console.log(process.env.NODE_ENV);
+
 app.use(cookieParser());
 app.use("/auth", authRoutes);
 //running the server

@@ -5,20 +5,12 @@ import { toast } from "react-toastify";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { TransactionContext } from "./context/transactionContext";
 import axios from "axios";
-<<<<<<< HEAD
 import { Outlet, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
-=======
-import {  Outlet, useNavigate,NavLink } from "react-router-dom";
->>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
 import { MdExitToApp } from "react-icons/md";
 
 const App = () => {
   const [isActive, setIsActive] = useState(false);
-<<<<<<< HEAD
-=======
-
->>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
   const { sections, serverURL, userName } = useContext(TransactionContext);
   const navigate = useNavigate();
   const handleLogout = async () => {
@@ -61,15 +53,8 @@ const App = () => {
 
             <div className="flex flex-col gap-2 px-2">
               {sections.map((items, index) => {
-<<<<<<< HEAD
                 return (
                   <NavLink
-=======
-               
-
-                return (
-                 <NavLink
->>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
                     key={index}
                     to={`/app/${items.type}`}
                     className={({ isActive }) =>

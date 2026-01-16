@@ -40,12 +40,7 @@ const Authentication = () => {
         setMessage(resp.data.message);
         return;
       }
-<<<<<<< HEAD
-      await fetchUserAndData();
 
-=======
-await fetchUserAndData();
->>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
       setEmail("");
       setPwd("");
       setConfirm("");
@@ -70,7 +65,7 @@ await fetchUserAndData();
         setMessage(res.data.message);
         return;
       }
-      await fetchUserAndData();
+
       setEmail("");
       setPwd("");
       setConfirm("");
@@ -79,19 +74,19 @@ await fetchUserAndData();
       navigate("/app/dashboard");
       toast.success(res.data.message);
     } catch (error) {
-      setMessage(error.response?.data?.message || "Login failed");
+      setMessage(
+        error.response?.data?.message || error.message || "Login failed"
+      );
 
       toast.error(error.response?.data?.message || "Login failed");
     }
   };
   useEffect(() => {
-    if (section === "login" && section === "signup" && section==="forget" ) {
-      setEmail("");
-      setPwd("");
-      setConfirm("");
-      setUserName("");
-      setMessage("");
-    }
+    setEmail("");
+    setPwd("");
+    setConfirm("");
+    setUserName("");
+    setMessage("");
   }, [section]);
   //------------------------handle forget password system----------------------------------------
   const handleForgetPassword = async (e) => {

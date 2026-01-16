@@ -5,11 +5,7 @@ import "./index.css";
 import { TransactionContextProvider } from "./context/transactionContext.jsx";
 import ProtectedRoute from "./ProtectedRoute/ProtectedRoute.jsx";
 import App from "./App.jsx";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import { ToastContainer } from "react-toastify";
@@ -41,14 +37,10 @@ const route = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-<<<<<<< HEAD
       {
         index: true,
         element: <Navigate to="dashboard" replace />,
       },
-=======
-  { path: "", element: <Navigate to="/app/dashboard" replace /> },
->>>>>>> 64b17200b990491b4b502eaa2556615ec25eb35e
       {
         path: "dashboard",
         element: <Dashboard />,
