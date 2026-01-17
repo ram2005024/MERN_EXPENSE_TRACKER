@@ -3,7 +3,6 @@
 * {
   font-family: "Outfit", sans-serif;
   box-sizing: border-box;
-  overflow-x: clip;
 }
 .no-spinner::-webkit-inner-spin-button,
 .no-spinner::-webkit-outer-spin-button {

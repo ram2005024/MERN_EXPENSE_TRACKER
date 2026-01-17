@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { TransactionContext } from "../context/transactionContext";
 import { toast } from "react-toastify";
+import { X } from "lucide-react";
 import {
   FaCalendar,
   FaCircle,
@@ -17,7 +18,8 @@ const Income = () => {
   const [category, setCategory] = useState("");
   const [des, setDes] = useState("");
   const [date, setDate] = useState("");
-
+  const [showDes, setShowDes] = useState(false);
+  const [activeDes, setActiveDes] = useState("");
   const {
     serverURL,
     incomes,
@@ -91,6 +93,23 @@ const Income = () => {
   };
   return (
     <div className="flex flex-col gap-3.5 p-4 bg-gray-100 border-2 border-white rounded-lg md:col-span-8">
+      {showDes && (
+        <div
+          onClick={() => setShowDes(false)}
+          className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="p-6 bg-white rounded-lg w-sm relative"
+          >
+            <p className="text-sm text-gray-600 wrap-break-word">{activeDes}</p>
+            <X
+              onClick={() => setShowDes(false)}
+              className="absolute cursor-pointer right-2 top-2 transition transform ease-in-out hover:scale-105 hover:text-red-400"
+            />
+          </div>
+        </div>
+      )}
       <h2 className="text-3xl text-indigo-800 font-semibold">Incomes</h2>
       <div className="py-5  bg-gray-50 border-2 border-white rounded-lg flex gap-2 justify-center items-center">
         <h2 className="text-2xl text-indigo-900 ">Total income </h2>
@@ -207,16 +226,22 @@ const Income = () => {
                         {new Date(items.date).getMonth() + 1}/
                         {new Date(items.date).getDate()}
                       </span>
-                      <span className="inline-flex gap-1.5 text-sm font-ligh justify-center items-center">
+                      <span
+                        onClick={() => {
+                          setActiveDes(items.des);
+                          setShowDes(true);
+                        }}
+                        className="inline-flex gap-1.5 text-sm font-ligh justify-center items-center"
+                      >
                         <FaComment className="size-3 text-indigo-950 font-light" />
-                        {items.des}
+                        {items.des.slice(0, 8)}...
                       </span>
                     </div>
                   </div>
                 </div>
                 <span>
                   <FaTrash
-                    className="absolute bottom-6 right-4 size-8 bg-indigo-950 p-2 rounded-lg cursor-pointer text-white hover:scale-105 hover:text-red-400 z-10"
+                    className="absolute bottom-6  max-sm:bottom-2 right-4 size-8 bg-indigo-950 p-2 rounded-lg cursor-pointer text-white hover:scale-105 hover:text-red-400 z-10"
                     onClick={() => handleDelete(items._id)}
                   />
                 </span>

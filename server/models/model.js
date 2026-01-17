@@ -38,6 +38,7 @@ UserSchema.methods.comparePwd = async function (candidatePassword) {
 };
 UserSchema.methods.genTokens = function () {
   const id = this._id;
+
   return jwt.sign(
     { userID: id, userName: this.name },
     process.env.JWT_SECRET_KEY,
