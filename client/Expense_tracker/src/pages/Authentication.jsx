@@ -40,7 +40,7 @@ const Authentication = () => {
         setMessage(resp.data.message);
         return;
       }
-
+      fetchUserAndData();
       setEmail("");
       setPwd("");
       setConfirm("");
@@ -65,7 +65,7 @@ const Authentication = () => {
         setMessage(res.data.message);
         return;
       }
-
+      fetchUserAndData();
       setEmail("");
       setPwd("");
       setConfirm("");
